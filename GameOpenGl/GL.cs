@@ -15,8 +15,8 @@ namespace OpenGL
 	/// <summary>
 	///     Provides bindings for OpenGL 3.3 Core Profile.
 	/// </summary>
-//	[System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "InconsistentNaming")]
-//	[System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "IdentifierTypo")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "InconsistentNaming")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "IdentifierTypo")]
 	[SuppressUnmanagedCodeSecurity]
 	public static unsafe partial class GL
 	{
