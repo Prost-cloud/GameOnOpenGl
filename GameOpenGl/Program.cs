@@ -6,7 +6,8 @@ namespace ProblemsGotKittens
 {
     class Game
     {
-        static viod Main()
+
+        static void Main()
         {
             Console.WriteLine("Hello, World!");
         }
