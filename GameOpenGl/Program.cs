@@ -4,7 +4,7 @@ using OpenGL;
 
 namespace ProblemsGotKittens
 {
-    class Game
+    class Program
     {
         static void Main()
         {
