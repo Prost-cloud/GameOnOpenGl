@@ -6,25 +6,45 @@ using System.Threading.Tasks;
 using GLFW;
 using OpenGL;
 
-namespace GameOpenGl.Render
+namespace GameOpenGl.Renders
 {
-    internal class Render
+    internal sealed class Render : IRender
     {
 
-        Render()
+        Window window;
+
+        public Render(int widht, int height)
         {
-            PrepareContext();
+            window = CreateWindow(widht, height);
+
         }
 
-        private void PrepareContext()
+        public void RenderFrame()
         {
-            Glfw.WindowHint(Hint.ClientApi, ClientApi.OpenGL);
-            Glfw.WindowHint(Hint.ContextVersionMajor, 3);
-            Glfw.WindowHint(Hint.ContextVersionMinor, 3);
-            Glfw.WindowHint(Hint.OpenglProfile, Profile.Core);
-            Glfw.WindowHint(Hint.Doublebuffer, true);
-            Glfw.WindowHint(Hint.Decorated, true);
+                Glfw.SwapBuffers(window);
+                Glfw.PollEvents();
+        }
 
+        private Window CreateWindow(int width, int height)
+        {
+            return CreateWindow(width, height, "Problems got Kittens");
+        }
+
+        private Window CreateWindow(int width, int height, string Title)
+        {
+            var NewWindow = Glfw.CreateWindow(width, height, Title, GLFW.Monitor.None, Window.None);
+
+            var screen = Glfw.PrimaryMonitor.WorkArea;
+            
+            var x = (screen.Width - width) / 2;
+            var y = (screen.Height - height) / 2;
+
+            Glfw.SetWindowPosition(window, x, y);
+
+            Glfw.MakeContextCurrent(NewWindow);
+            GL.Import(Glfw.GetProcAddress);
+
+            return NewWindow;
         }
     }
 }

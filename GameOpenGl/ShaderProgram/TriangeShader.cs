@@ -9,7 +9,7 @@ using OpenGL;
 
 namespace GameOpenGl.ShaderProgram
 {
-    internal class TriangeShader : IShaderProgram
+    internal sealed class TriangeShader : IShaderProgram
     {
         public uint ProgramID;
 

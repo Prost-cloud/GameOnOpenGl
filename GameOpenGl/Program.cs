@@ -1,4 +1,5 @@
 ﻿using System;
+using GameOpenGl.Game;
 using GLFW;
 using OpenGL;
 
@@ -8,7 +9,9 @@ namespace ProblemsGotKittens
     {
         static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            Game game = new Game();
+
+            game.Run();
         }
     }
 }
