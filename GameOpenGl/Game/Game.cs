@@ -12,8 +12,8 @@ namespace GameOpenGl.Game
 {
     internal class Game
     {
-        ILevel currentLevel;
-        IRender render;
+        private ILevel currentLevel;
+        private IRender render;
 
         //public event Render();
 
@@ -24,7 +24,7 @@ namespace GameOpenGl.Game
         }
         public void Run()
         {
-                render.RenderFrame();
+            render.RenderFrame();
         }
 
     }

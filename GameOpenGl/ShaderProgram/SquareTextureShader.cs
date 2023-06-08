@@ -9,26 +9,37 @@ using OpenGL;
 
 namespace GameOpenGl.ShaderProgram
 {
-    internal sealed class TriangeShader : IShaderProgram
+    internal sealed class SquareTextureShader : IShaderProgram
     {
         public uint ProgramID;
 
         private const string VertexShader = @"#version 330 core
                                                 layout (location = 0) in vec3 pos;
+                                                layout (location = 1) in vec2 inTexCoord;
+
+                                                uniform vec4 model;
+                                                uniform vec4 view;
+                                                uniform vec4 projection;
+                                                    
+                                                out vec2 texCoord;
 
                                                 void main()
                                                 {
-                                                    gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+                                                    position = projection * view * model * vec4(pos, 1.0);
+                                                    texCoord = (inTexCoord.x, 1.0 - inTexCood.y);
                                                 }";
 
         private const string FragmentShader = @"#version 330 core
+                                                    
+                                                in vec2 texCoord;
+                                                    
                                                 out vec4 result;
 
-                                                uniform vec3 color;
+                                                uniform sampler2D inTexture;
 
                                                 void main()
                                                 {
-                                                    result = vec4(color, 1.0);
+                                                    result = texture(inTexture, texCoord);
                                                 }";
 
         private uint vertex;
@@ -52,7 +63,7 @@ namespace GameOpenGl.ShaderProgram
             GL.glDeleteShader(vertex);
             GL.glDeleteShader(fragment);
 
-            GL.glUseProgram(ProgramID);
+            //GL.glUseProgram(ProgramID);
         }
 
         private uint CreateShader(int type, string source)
@@ -65,9 +76,9 @@ namespace GameOpenGl.ShaderProgram
             return shader;
         }
 
-        ~TriangeShader()
-        {
-            GL.glDeleteProgram(ProgramID);
-        }
+       // ~TriangeShader()
+       // {
+       //     GL.glDeleteProgram(ProgramID);
+       // }
     }
 }

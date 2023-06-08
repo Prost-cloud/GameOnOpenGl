@@ -11,6 +11,12 @@ namespace GameOpenGl.GameObject
     {
         private Pos pos;
         private Color color;
+        private float[] vertices = new float[9]
+        {
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f, 
+            0.0f,  1.0f, 0.0f
+        };
 
         public TestTriangle(Pos pos, Color color)
         {
@@ -18,6 +24,8 @@ namespace GameOpenGl.GameObject
             this.pos = pos;
         }
 
-        public TestTriangle(int x, int y) : this(new Pos(x, y), new Color(1,1,1,1)) { }
+        public TestTriangle(float x, float y) : this(new Pos(x, y), new Color(1, 1, 1, 1)) { }
+        public TestTriangle(float x, float y, Color color) : this(new Pos(x, y), color) { }
+        public TestTriangle(float x, float y, float r, float g, float b, float a) : this(new Pos(x, y), new Color(r, g, b, a)) { }
     }
 }

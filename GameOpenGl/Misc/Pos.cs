@@ -8,9 +8,9 @@ namespace GameOpenGl.Misc
 {
     internal struct Pos
     {
-        int x, y;
+        float x, y;
 
-        public Pos(int x, int y)
+        public Pos(float x, float y)
         {
             this.x = x;
             this.y = y;
