@@ -38,11 +38,8 @@ namespace GameOpenGl.Renders
 
         public void RenderFrame()
         {
-            while (!Glfw.WindowShouldClose(window))
-            {
                 Glfw.SwapBuffers(window);
                 Glfw.PollEvents();
-            }
         }
 
         private Window CreateWindow(int width, int height)
