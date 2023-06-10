@@ -8,7 +8,6 @@ namespace GameOpenGl.RenderProgram
 {
     internal interface IShaderProgram
     {
-        void PrepareShader();
-        void PushShader();
+        uint GetShaderId();
     }
 }

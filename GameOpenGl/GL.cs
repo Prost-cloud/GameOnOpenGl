@@ -915,7 +915,7 @@ namespace OpenGL
 		/// <returns>The generated texture name.</returns>
 		public static uint glGenTexture()
 		{
-			uint texture;
+			uint texture = new();
 			_glGenTextures(1, &texture);
 			return texture;
 		}

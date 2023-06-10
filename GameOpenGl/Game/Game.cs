@@ -19,12 +19,15 @@ namespace GameOpenGl.Game
 
         public Game()
         {
-            currentLevel = new TestLevel();
             render = new Render(1280, 720);
+            currentLevel = new TestLevel();
         }
         public void Run()
         {
-            render.RenderFrame();
+            while (!render.IsExit())
+            {
+                render.RenderFrame(currentLevel.GetGameObjects());
+            }
         }
 
     }

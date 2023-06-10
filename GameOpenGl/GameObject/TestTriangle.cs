@@ -27,5 +27,15 @@ namespace GameOpenGl.GameObject
         public TestTriangle(float x, float y) : this(new Pos(x, y), new Color(1, 1, 1, 1)) { }
         public TestTriangle(float x, float y, Color color) : this(new Pos(x, y), color) { }
         public TestTriangle(float x, float y, float r, float g, float b, float a) : this(new Pos(x, y), new Color(r, g, b, a)) { }
+
+        public Pos GetPosition()
+        {
+            throw new NotImplementedException();
+        }
+
+        public uint GetTextureId()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

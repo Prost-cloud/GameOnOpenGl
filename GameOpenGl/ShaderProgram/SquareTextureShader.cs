@@ -11,22 +11,23 @@ namespace GameOpenGl.ShaderProgram
 {
     internal sealed class SquareTextureShader : IShaderProgram
     {
-        public uint ProgramID;
+        private uint _programID;
 
         private const string VertexShader = @"#version 330 core
                                                 layout (location = 0) in vec3 pos;
                                                 layout (location = 1) in vec2 inTexCoord;
 
-                                                uniform vec4 model;
-                                                uniform vec4 view;
-                                                uniform vec4 projection;
+                                                uniform mat4 model;
+                                                uniform mat4 view;
+                                                uniform mat4 projection;
                                                     
                                                 out vec2 texCoord;
 
                                                 void main()
                                                 {
-                                                    position = projection * view * model * vec4(pos, 1.0);
+                                                   // position = projection * view * model * vec4(pos.x, pos.y, pos.z, 1.0);
                                                     texCoord = (inTexCoord.x, 1.0 - inTexCood.y);
+                                                    position = vec4(pos.x, pos.y, pos.z, 1.0);
                                                 }";
 
         private const string FragmentShader = @"#version 330 core
@@ -42,23 +43,20 @@ namespace GameOpenGl.ShaderProgram
                                                     result = texture(inTexture, texCoord);
                                                 }";
 
-        private uint vertex;
-        private uint fragment;
-
-        public void PrepareShader()
+        public SquareTextureShader()
         {
-            vertex = CreateShader(GL.GL_VERTEX_SHADER, VertexShader);
-            fragment = CreateShader(GL.GL_FRAGMENT_SHADER, FragmentShader);
-        }
+            var vertex = CreateShader(GL.GL_VERTEX_SHADER, VertexShader);
+            var fragment = CreateShader(GL.GL_FRAGMENT_SHADER, FragmentShader);
 
-        public void PushShader()
-        {
-            ProgramID = GL.glCreateProgram();
+            _programID = GL.glCreateProgram();
 
-            GL.glAttachShader(ProgramID, vertex);   
-            GL.glAttachShader(ProgramID, fragment);
+            GL.glCompileShader(vertex);
+            GL.glCompileShader(fragment);
 
-            GL.glLinkProgram(ProgramID);
+            GL.glAttachShader(_programID, vertex);   
+            GL.glAttachShader(_programID, fragment);
+
+            GL.glLinkProgram(_programID);
 
             GL.glDeleteShader(vertex);
             GL.glDeleteShader(fragment);
@@ -76,9 +74,14 @@ namespace GameOpenGl.ShaderProgram
             return shader;
         }
 
-       // ~TriangeShader()
-       // {
-       //     GL.glDeleteProgram(ProgramID);
-       // }
+        public uint GetShaderId()
+        {
+            return _programID;
+        }
+
+        // ~TriangeShader()
+        // {
+        //     GL.glDeleteProgram(ProgramID);
+        // }
     }
 }

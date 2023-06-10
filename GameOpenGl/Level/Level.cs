@@ -9,15 +9,16 @@ namespace GameOpenGl.Level
 {
     internal class TestLevel : ILevel
     {
-        private IGameObject[] gameObjects;
+        private IGameObject[] _gameObjects;
+        public IGameObject[] GetGameObjects() => _gameObjects;
 
         public TestLevel()
         {
-            gameObjects = new IGameObject[]
+            _gameObjects = new IGameObject[]
             {
-                new TestTriangle(1,1),
-                new TestTriangle(2,1),
-                new TestTriangle(3,1)
+                new Wall(new Misc.Pos(-1,0), "\\Textures\\wall.png"),
+                new Wall(new Misc.Pos(0,0), "\\Textures\\wall.png"),
+                new Wall(new Misc.Pos(1,0), "\\Textures\\wall.png")
             };
         }
     }
