@@ -19,10 +19,10 @@ namespace GameOpenGl.VAO
             //};
 
             float[] vertices = {
-                0.5f, 0.5f, 0.0f,    1.0f, 1.0f, // Upper Right
-                0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Down Right
-                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, // Down Left
-                -0.5f, 0.5f, 0.0f,   0.0f, 1.0f  // Upper left
+                0.28f, 0.5f, 0.0f,    1.0f, 1.0f, // Upper Right
+                0.28f, -0.5f, 0.0f,   1.0f, 0.0f, // Down Right
+                -0.28f, -0.5f, 0.0f,  0.0f, 0.0f, // Down Left
+                -0.28f, 0.5f, 0.0f,   0.0f, 1.0f  // Upper left
             };
 
             uint[] indices =

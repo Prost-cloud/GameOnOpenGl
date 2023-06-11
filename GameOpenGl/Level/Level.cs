@@ -9,19 +9,32 @@ namespace GameOpenGl.Level
 {
     internal class TestLevel : ILevel
     {
-        private IGameObject[] _gameObjects;
-        public IGameObject[] GetGameObjects() => _gameObjects;
+        private List<IGameObject> _gameObjects;
+        public IGameObject[] GetGameObjects() => _gameObjects.ToArray();
 
         public TestLevel()
         {
-            _gameObjects = new IGameObject[] {
-                new Wall(new Misc.Pos(-1f, 0f), "\\Textures\\wall.png"),
-                new Wall(new Misc.Pos(1f, 0f), "\\Textures\\Blue.png"),
-                new Wall(new Misc.Pos(0f, 1f), "\\Textures\\Blue.png"),
-                new Wall(new Misc.Pos(-1f, 1f), "\\Textures\\wall.png"),
-                new Wall(new Misc.Pos(-1f, 1f), "\\Textures\\1_2789.png"),
-                new Wall(new Misc.Pos(-1f, 0f), "\\Textures\\1_2789.png")
-            };
+
+            int x = 10, y = 8;
+
+            _gameObjects = new List<IGameObject>();
+
+            for (int i = 0; i < 10; i++)
+                for (int j = 0; j < 8; j++)
+                {
+                    if (i == 0 || i == 9 || j == 0 || j == 7)
+                    {
+                        _gameObjects.Add(new Wall(new Misc.Pos(i, j), "\\Textures\\wall.png"));
+                    }
+                    else
+                    {
+                        _gameObjects.Add(new BackgroundWall(new Misc.Pos(i, j), "\\Textures\\BGWall.jpg"));
+                    }
+                }
+
+
+
+
         }
     }
 }

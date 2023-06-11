@@ -83,7 +83,7 @@ namespace GameOpenGl.Renders
             ///    new Vector3(0.0f, 0.0f, 0.0f) + new Vector3(0.0f, 0.0f, 5.0f),
             ///    new Vector3(0.0f, 1.0f, 0.0f));
 
-            var viewMatrix = Matrix4x4.CreateTranslation(objPos.X, objPos.Y, 0);
+            var viewMatrix = Matrix4x4.CreateTranslation(objPos.X - (0.44f * objPos.X), objPos.Y, 0);
 
             var matrixScale = Matrix4x4.CreateScale(0.1f);
 

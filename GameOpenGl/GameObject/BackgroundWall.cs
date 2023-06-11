@@ -10,10 +10,9 @@ using System.Threading.Tasks;
 
 namespace GameOpenGl.GameObject
 {
-    internal sealed class Wall : GameObject, IGameObject
+    internal class BackgroundWall : GameObject, IGameObject
     {
-
-        public Wall(Pos pos, string texturePath) : base(pos, texturePath)
+        public BackgroundWall(Pos pos, string v) : base(pos, v)
         {
 
         }
