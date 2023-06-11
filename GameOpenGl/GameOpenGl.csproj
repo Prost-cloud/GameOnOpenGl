@@ -25,6 +25,9 @@
     <None Update="Textures\BGWall.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Player.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

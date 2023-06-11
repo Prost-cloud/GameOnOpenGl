@@ -15,7 +15,13 @@ namespace GameOpenGl.GameObject
         protected Pos _position;
         protected uint _textureId;
 
-        public GameObject(Pos pos, string texturePath) {
+        public GameObject()
+        {
+            _position = new Pos(0,0);
+        }
+
+        public GameObject(Pos pos, string texturePath)
+        {
             this._position = pos;
 
             byte[] textureByteArray;
@@ -51,11 +57,11 @@ namespace GameOpenGl.GameObject
             GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
             GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
-            GL.glBindTexture(GL.GL_TEXTURE_2D, 0); 
+            GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
         }
 
         public Pos GetPosition() => _position;
 
-        public uint GetTextureId() => _textureId;
+        public virtual uint GetTextureId() => _textureId;
     }
 }

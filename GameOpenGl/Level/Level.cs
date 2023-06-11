@@ -32,7 +32,10 @@ namespace GameOpenGl.Level
                     }
                 }
 
-
+            _gameObjects.Add(new Player(new Misc.Pos(0, 0), "\\Textures\\Player.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "\\Textures\\1_2789.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "\\Textures\\1_2789.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "\\Textures\\1_2789.png"));
 
 
         }

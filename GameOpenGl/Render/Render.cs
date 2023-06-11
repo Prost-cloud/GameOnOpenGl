@@ -91,12 +91,13 @@ namespace GameOpenGl.Renders
             //GL.glUniformMatrix4fv(projectionLocation, 1, false, _projectionMatrix.ToFloatArray());
             GL.glUniformMatrix4fv(viewLocation, 1, false, (viewMatrix * matrixScale).ToFloatArray());
 
-            modelMatrix.ShowMatrix("model");
-            viewMatrix.ShowMatrix("view");
+            //modelMatrix.ShowMatrix("model");
+            //viewMatrix.ShowMatrix("view");
             //(modelMatrix * viewMatrix).ShowMatrix("model * view");
             //(viewMatrix * modelMatrix).ShowMatrix("view * model");
 
             //GL.glActiveTexture(GL.GL_TEXTURE0);
+            Console.WriteLine($"Texture Id {gameObject.GetTextureId()}");
             GL.glBindTexture(GL.GL_TEXTURE_2D, gameObject.GetTextureId());
             //GL.glUniform1i(TextureLocation, 0);
 
