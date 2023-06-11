@@ -25,9 +25,11 @@ namespace GameOpenGl.ShaderProgram
 
                                                 void main()
                                                 {
-                                                   // position = projection * view * model * vec4(pos.x, pos.y, pos.z, 1.0);
-                                                    texCoord = (inTexCoord.x, 1.0 - inTexCood.y);
-                                                    position = vec4(pos.x, pos.y, pos.z, 1.0);
+                                                    //gl_Position = projection * view * model * vec4(pos.x, pos.y, pos.z, 1.0);
+                                                    gl_Position = view * model * vec4(pos.x, pos.y, pos.z, 1.0);
+                                                    texCoord = vec2(inTexCoord.x, 1.0f - inTexCoord.y);
+                                                    //texCoord = vec2(inTexCoord.x, 1.0f - inTexCoord.y);
+                                                    //gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
                                                 }";
 
         private const string FragmentShader = @"#version 330 core
@@ -41,6 +43,9 @@ namespace GameOpenGl.ShaderProgram
                                                 void main()
                                                 {
                                                     result = texture(inTexture, texCoord);
+                                                    //result = vec4(1f, 0f, 0.5f, 1);
+                                                    //gl_FragColor = texture(inTexture, texCoord);
+                                                    //result = vec4(1f, 0f, 0f, 0f);
                                                 }";
 
         public SquareTextureShader()
@@ -50,13 +55,26 @@ namespace GameOpenGl.ShaderProgram
 
             _programID = GL.glCreateProgram();
 
-            GL.glCompileShader(vertex);
-            GL.glCompileShader(fragment);
-
+            //GL.glCompileShader(vertex);
+            //GL.glCompileShader(fragment);
             GL.glAttachShader(_programID, vertex);   
             GL.glAttachShader(_programID, fragment);
 
+            //GL.glBindAttribLocation(_programID, 1u, "model");
+            //GL.glBindAttribLocation(_programID, 2u, "view");
+            //GL.glBindAttribLocation(_programID, 3u, "projection");
+            //GL.glBindAttribLocation(_programID, 4u, "inTexture");
+
+            //var modelLocation = GL.glGetUniformLocation(_programID, "model");
+            //var ProjectionLocation = GL.glGetUniformLocation(_programID, "projection");
+            //var viewLocation = GL.glGetUniformLocation(_programID, "view");
+            //var TextureLocation = GL.glGetUniformLocation(_programID, "inTexture");
+
+
             GL.glLinkProgram(_programID);
+
+            GL.glDetachShader(_programID, vertex);
+            GL.glDetachShader(_programID, fragment);
 
             GL.glDeleteShader(vertex);
             GL.glDeleteShader(fragment);
@@ -70,6 +88,18 @@ namespace GameOpenGl.ShaderProgram
 
             GL.glShaderSource(shader, source);
             GL.glCompileShader(shader);
+
+            int [] status = GL.glGetShaderiv(shader, GL.GL_COMPILE_STATUS, 1);
+
+            if (status[0] == 0)
+            {
+                string error = GL.glGetShaderInfoLog(shader);
+                Console.WriteLine("Shader compiling error: " + error);
+            }
+            else
+            {
+                Console.WriteLine("Shader compile success");
+            }
 
             return shader;
         }

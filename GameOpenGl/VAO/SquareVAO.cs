@@ -10,18 +10,25 @@ namespace GameOpenGl.VAO
         public uint IdVAO => _idVAO;
         public SquareVAO()
         {
-            float[] vertices =
-            {
-                1.0f, 1.0f, 0.0f,    1.0f, 1.0f, // Верхний правый 
-                1.0f, -1.0f, 0.0f,   1.0f, 0.0f, // Нижний правый 
-                -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, // Нижний левый 
-                -1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // Верхний левый
+            //float[] vertices =
+            //{
+            //    1.0f, 1.0f, 1.0f,    1.0f, 1.0f, // Upper Right
+            //    1.0f, -1.0f, 1.0f,   1.0f, 0.0f, // Down Right
+            //    -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, // Down Left
+            //    -1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // Upper left
+            //};
+
+            float[] vertices = {
+                0.5f, 0.5f, 0.0f,    1.0f, 1.0f, // Upper Right
+                0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Down Right
+                -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, // Down Left
+                -0.5f, 0.5f, 0.0f,   0.0f, 1.0f  // Upper left
             };
 
             uint[] indices =
             {
-                0, 1, 3,
-                1, 2, 3
+                0, 1, 2,
+                2, 3, 0
             };
 
             _idVAO = GL.glGenVertexArray();
@@ -35,10 +42,11 @@ namespace GameOpenGl.VAO
                 fixed (float* v = &vertices[0])
                     GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float) * vertices.Count(), v, GL.GL_DYNAMIC_DRAW);
 
-                GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 3 * sizeof(float), null);
-                GL.glEnableVertexAttribArray(0);
-                GL.glVertexAttribPointer(1, 2, GL.GL_INT, false, 2 * sizeof(uint), new IntPtr(3 * sizeof(float)));
-                GL.glEnableVertexAttribArray(1);
+                GL.glVertexAttribPointer(0, 3, GL.GL_FLOAT, false, 5 * sizeof(float), null);
+                GL.glEnableVertexAttribArray(0u);
+                GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * sizeof(float), new IntPtr(3 * sizeof(float)));
+                //GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+                GL.glEnableVertexAttribArray(1u);
             }
 
             GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, _idIBO);

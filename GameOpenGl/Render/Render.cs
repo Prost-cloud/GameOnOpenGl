@@ -21,6 +21,7 @@ namespace GameOpenGl.Renders
         private SquareVAO _VAO;
         private Matrix4x4 _projectionMatrix;
         private IShaderProgram _shaderProgram;
+        private Matrix4x4 _ZeroMatrix;
 
         public bool IsExit() => Glfw.WindowShouldClose(window);
 
@@ -36,6 +37,7 @@ namespace GameOpenGl.Renders
 
             _shaderProgram = new SquareTextureShader();
 
+            _ZeroMatrix = new Matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 1);
         }
 
         private void PrepareContext()
@@ -53,6 +55,9 @@ namespace GameOpenGl.Renders
             Glfw.SwapBuffers(window);
             Glfw.PollEvents();
 
+            GL.glClearColor(0f, 0f, 0f, 1f);
+            GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+
             foreach (var GameObject in gameObjects)
             {
                 DrawGameObject(GameObject);
@@ -64,34 +69,46 @@ namespace GameOpenGl.Renders
 
             GL.glUseProgram(_shaderProgram.GetShaderId());
             var modelLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "model");
-            var ProjectionLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "projection");
+            var projectionLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "projection");
             var viewLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "view");
             var TextureLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "inTexture");
 
             var objPos = gameObject.GetPosition();
 
-            var modelMatrix = new Matrix4x4() * Matrix4x4.CreateTranslation(objPos.X, objPos.Y, 0);
+            //var modelMatrix = _ZeroMatrix * Matrix4x4.CreateTranslation(objPos.X, objPos.Y, 0);
+            var modelMatrix =  Matrix4x4.CreateTranslation(0, 0, 0);
 
-            var viewMatrix = Matrix4x4.CreateLookAt(
-                new Vector3(0.0f, 0.0f, 0.0f),
-                new Vector3(0.0f, 0.0f, 0.0f) + new Vector3(0.0f, 0.0f, -1.0f),
-                new Vector3(0.0f, 1.0f, 0.0f));
+            ///var viewMatrix = Matrix4x4.CreateLookAt(
+            ///    new Vector3(0.0f, 0.0f, 0.0f),
+            ///    new Vector3(0.0f, 0.0f, 0.0f) + new Vector3(0.0f, 0.0f, 5.0f),
+            ///    new Vector3(0.0f, 1.0f, 0.0f));
+
+            var viewMatrix = Matrix4x4.CreateTranslation(objPos.X, objPos.Y, 0);
+
+            var matrixScale = Matrix4x4.CreateScale(0.1f);
 
             GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
-            GL.glUniformMatrix4fv(ProjectionLocation, 1, false, _projectionMatrix.ToFloatArray());
-            GL.glUniformMatrix4fv(viewLocation, 1, false, viewMatrix.ToFloatArray());
+            //GL.glUniformMatrix4fv(projectionLocation, 1, false, _projectionMatrix.ToFloatArray());
+            GL.glUniformMatrix4fv(viewLocation, 1, false, (viewMatrix * matrixScale).ToFloatArray());
 
-            GL.glActiveTexture(GL.GL_TEXTURE0);
+            modelMatrix.ShowMatrix("model");
+            viewMatrix.ShowMatrix("view");
+            //(modelMatrix * viewMatrix).ShowMatrix("model * view");
+            //(viewMatrix * modelMatrix).ShowMatrix("view * model");
+
+            //GL.glActiveTexture(GL.GL_TEXTURE0);
             GL.glBindTexture(GL.GL_TEXTURE_2D, gameObject.GetTextureId());
-            GL.glUniform1i(TextureLocation, 0);
+            //GL.glUniform1i(TextureLocation, 0);
 
             GL.glBindVertexArray(_VAO.IdVAO);
 
             unsafe
             {
-                // GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
+                //GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
                 GL.glDrawElements(GL.GL_TRIANGLES, 6, GL.GL_UNSIGNED_INT, (void*) 0);
             }
+
+            GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
 
             GL.glBindVertexArray(0);
 

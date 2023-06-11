@@ -14,11 +14,13 @@ namespace GameOpenGl.Level
 
         public TestLevel()
         {
-            _gameObjects = new IGameObject[]
-            {
-                new Wall(new Misc.Pos(-1,0), "\\Textures\\wall.png"),
-                new Wall(new Misc.Pos(0,0), "\\Textures\\wall.png"),
-                new Wall(new Misc.Pos(1,0), "\\Textures\\wall.png")
+            _gameObjects = new IGameObject[] {
+                new Wall(new Misc.Pos(-1f, 0f), "\\Textures\\wall.png"),
+                new Wall(new Misc.Pos(1f, 0f), "\\Textures\\Blue.png"),
+                new Wall(new Misc.Pos(0f, 1f), "\\Textures\\Blue.png"),
+                new Wall(new Misc.Pos(-1f, 1f), "\\Textures\\wall.png"),
+                new Wall(new Misc.Pos(-1f, 1f), "\\Textures\\1_2789.png"),
+                new Wall(new Misc.Pos(-1f, 0f), "\\Textures\\1_2789.png")
             };
         }
     }
