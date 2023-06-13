@@ -53,6 +53,9 @@ namespace GameOpenGl.GameObject
                 GL.GL_UNSIGNED_BYTE,
                 data.Scan0);
 
+            GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+            GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+
             GL.glEnable(GL.GL_BLEND);
             GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
