@@ -22,6 +22,9 @@ namespace GameOpenGl.Renders
         private Matrix4x4 _projectionMatrix;
         private IShaderProgram _shaderProgram;
 
+        private double _lastTime = 0;
+        private double _currentTime, _deltaTime;
+
         public bool IsExit() => Glfw.WindowShouldClose(window);
 
         public Render(int widht, int height)
@@ -45,12 +48,20 @@ namespace GameOpenGl.Renders
             Glfw.WindowHint(Hint.OpenglProfile, Profile.Core);
             Glfw.WindowHint(Hint.Doublebuffer, true);
             Glfw.WindowHint(Hint.Decorated, true);
+            Glfw.SwapInterval(0);
+            
         }
 
         public void RenderFrame(IGameObject[] gameObjects)
         {
+            _currentTime = Glfw.Time;
+
+            _deltaTime = _currentTime - _lastTime;
+            Console.WriteLine($"FPS: {(int)(1 / _deltaTime)}");
+
             Glfw.SwapBuffers(window);
             Glfw.PollEvents();
+            //Glfw.WaitEvents();
 
             GL.glClearColor(0f, 0f, 0f, 1f);
             GL.glClear(GL.GL_COLOR_BUFFER_BIT);
@@ -59,6 +70,8 @@ namespace GameOpenGl.Renders
             {
                 DrawGameObject(GameObject);
             }
+
+            _lastTime = _currentTime;
         }
 
         private void DrawGameObject(IGameObject gameObject)

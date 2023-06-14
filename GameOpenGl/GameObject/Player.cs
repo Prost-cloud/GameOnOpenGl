@@ -33,6 +33,8 @@ namespace GameOpenGl.GameObject
             int xPixel = 0;
             int yPixel = 0;
 
+            int pixelsBetweenSprite = 4;
+
             data = imageSource.LockBits(new Rectangle(0, 0, imageSource.Width, imageSource.Height),
                 ImageLockMode.ReadOnly,
                 PixelFormat.Format32bppArgb);
@@ -51,7 +53,7 @@ namespace GameOpenGl.GameObject
                 {
                     int[] rowData = new int[oneWidth];
 
-                    IntPtr src = data.Scan0 + ((j + 0) * data.Stride) + (xPixel * 4);
+                    IntPtr src = data.Scan0 + ((j + 0) * data.Stride) + (xPixel * 4) + pixelsBetweenSprite * i;
                     IntPtr dst = dataSprite.Scan0 + (j * dataSprite.Stride);
 
                     Marshal.Copy(src, rowData, 0, oneWidth);
