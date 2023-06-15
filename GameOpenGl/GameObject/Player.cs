@@ -13,7 +13,7 @@ namespace GameOpenGl.GameObject
 {
     internal sealed class Player : GameObject, IGameObject
     {
-        private List<uint> _textures;
+        private List<string> _textures;
         private int _nextTexture;
         private int _currentTexture;
         public Player(Pos pos, string texture)
@@ -25,7 +25,7 @@ namespace GameOpenGl.GameObject
             _textures = new();
 
             BitmapData data;
-            Bitmap imageSource = new Bitmap(Environment.CurrentDirectory + texture);
+            Bitmap imageSource = new Bitmap(Environment.CurrentDirectory + "\\Textures\\" + texture);
 
             int oneWidth = 91;
             int oneHeight = 130;
@@ -41,55 +41,58 @@ namespace GameOpenGl.GameObject
 
             for (int i = 0; i < 3; i++)
             {
-                //var newImage=image.
-
-                Bitmap temp = new Bitmap(oneWidth, oneHeight);
-
-                var dataSprite = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height),
-                       ImageLockMode.ReadWrite,
-                       PixelFormat.Format32bppArgb);
-
-                for (int j = 0; j < oneHeight; j++)
+                if (!_textureMap.ContainsKey(texture + i))
                 {
-                    int[] rowData = new int[oneWidth];
 
-                    IntPtr src = data.Scan0 + ((j + 0) * data.Stride) + (xPixel * 4) + pixelsBetweenSprite * i;
-                    IntPtr dst = dataSprite.Scan0 + (j * dataSprite.Stride);
+                    Bitmap temp = new Bitmap(oneWidth, oneHeight);
 
-                    Marshal.Copy(src, rowData, 0, oneWidth);
-                    Marshal.Copy(rowData, 0, dst, oneWidth);
+                    var dataSprite = temp.LockBits(new Rectangle(0, 0, temp.Width, temp.Height),
+                           ImageLockMode.ReadWrite,
+                           PixelFormat.Format32bppArgb);
+
+                    for (int j = 0; j < oneHeight; j++)
+                    {
+                        int[] rowData = new int[oneWidth];
+
+                        IntPtr src = data.Scan0 + ((j + 0) * data.Stride) + (xPixel * 4) + pixelsBetweenSprite * i;
+                        IntPtr dst = dataSprite.Scan0 + (j * dataSprite.Stride);
+
+                        Marshal.Copy(src, rowData, 0, oneWidth);
+                        Marshal.Copy(rowData, 0, dst, oneWidth);
+                    }
+
+                    uint textureId = GL.glGenTexture();
+
+                    GL.glBindTexture(GL.GL_TEXTURE_2D, textureId);
+
+                    GL.glTexImage2D(
+                        GL.GL_TEXTURE_2D,
+                        0,
+                        GL.GL_RGBA,
+                        oneWidth,
+                        oneHeight,
+                        0,
+                        GL.GL_BGRA,
+                        GL.GL_UNSIGNED_BYTE,
+                        dataSprite.Scan0);
+
+                    //var j = GL.GetError();
+                    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+                    GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+
+                    GL.glEnable(GL.GL_BLEND);
+                    //GL.glDisable(GL.GL_BLEND);
+                    //GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+                    GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
+                    GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
+
+
+                    _textures.Add(texture + i);
+                    _textureMap.Add(texture + i, textureId);
+
+                    xPixel += oneWidth;
                 }
-
-                _textureId = GL.glGenTexture();
-
-                GL.glBindTexture(GL.GL_TEXTURE_2D, _textureId);
-
-                GL.glTexImage2D(
-                    GL.GL_TEXTURE_2D,
-                    0,
-                    GL.GL_RGBA,
-                    oneWidth,
-                    oneHeight,
-                    0,
-                    GL.GL_BGRA,
-                    GL.GL_UNSIGNED_BYTE,
-                    dataSprite.Scan0);
-
-                //var j = GL.GetError();
-                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-
-                GL.glEnable(GL.GL_BLEND);
-                //GL.glDisable(GL.GL_BLEND);
-                //GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-
-                GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
-                GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
-
-
-                _textures.Add(_textureId);
-
-                xPixel += oneWidth;
             }
             imageSource.UnlockBits(data);
         }
@@ -99,8 +102,8 @@ namespace GameOpenGl.GameObject
             if (_nextTexture > 0)
             {
                 _nextTexture--;
-                //Console.WriteLine($"returned {_textures[_currentTexture]} ID {_currentTexture}");
-                return _textures[_currentTexture];
+                return GameObject.GetValueByName(_textures[_currentTexture]);
+                
             }
             else
             {
@@ -114,9 +117,7 @@ namespace GameOpenGl.GameObject
                     _currentTexture++;
                 }
 
-                //Console.WriteLine($"returned {_textures[_currentTexture]} ID {_currentTexture}");
-
-                return _textures[_currentTexture];
+                return GameObject.GetValueByName(_textures[_currentTexture]);
             }
         }
     }

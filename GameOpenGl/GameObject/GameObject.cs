@@ -12,59 +12,81 @@ namespace GameOpenGl.GameObject
 {
     internal class GameObject : IGameObject
     {
-        protected Pos _position;
-        protected uint _textureId;
+        static protected Dictionary<string, uint> _textureMap;
 
+        protected Pos _position;
+        protected string _textureName;
+
+        static GameObject()
+        {
+            _textureMap = new();
+        }
         public GameObject()
         {
             _position = new Pos(0,0);
         }
 
-        public GameObject(Pos pos, string texturePath)
+        public GameObject(Pos pos, string textureName)
         {
             this._position = pos;
+            this._textureName = textureName;
 
-            byte[] textureByteArray;
+            if (!_textureMap.TryGetValue(textureName, out _))
+            {
+                byte[] textureByteArray;
 
-            int width, height;
-            BitmapData data;
-            Bitmap image = new Bitmap(Environment.CurrentDirectory + texturePath);
+                int width, height;
+                BitmapData data;
+                Bitmap image = new Bitmap(Environment.CurrentDirectory + "\\Textures\\" + textureName);
 
 
-            width = image.Width;
-            height = image.Height;
+                width = image.Width;
+                height = image.Height;
 
-            data = image.LockBits(new Rectangle(0, 0, width, height),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb);
+                data = image.LockBits(new Rectangle(0, 0, width, height),
+                    ImageLockMode.ReadOnly,
+                    PixelFormat.Format32bppArgb);
 
-            _textureId = GL.glGenTexture();
+                var textureId = GL.glGenTexture();
 
-            GL.glBindTexture(GL.GL_TEXTURE_2D, _textureId);
+                GL.glBindTexture(GL.GL_TEXTURE_2D, textureId);
 
-            GL.glTexImage2D(
-                GL.GL_TEXTURE_2D,
-                0,
-                GL.GL_RGBA,
-                width,
-                height,
-                0,
-                GL.GL_BGRA,
-                GL.GL_UNSIGNED_BYTE,
-                data.Scan0);
+                GL.glTexImage2D(
+                    GL.GL_TEXTURE_2D,
+                    0,
+                    GL.GL_RGBA,
+                    width,
+                    height,
+                    0,
+                    GL.GL_BGRA,
+                    GL.GL_UNSIGNED_BYTE,
+                    data.Scan0);
 
-            GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-            GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 
-            GL.glEnable(GL.GL_BLEND);
-            GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                GL.glEnable(GL.GL_BLEND);
+                GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
-            GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
-            GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
+                GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
+                GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
+
+                GameObject.AddTexture(textureName, textureId);
+            }
         }
 
         public Pos GetPosition() => _position;
 
-        public virtual uint GetTextureId() => _textureId;
+        public virtual uint GetTextureId() => GameObject.GetValueByName(_textureName);
+
+        static protected void AddTexture(string name, uint value)
+        {
+            _textureMap.Add(name, value);
+        }
+        
+        static protected uint GetValueByName(string name)
+        {
+            return _textureMap[name];
+        }
     }
 }

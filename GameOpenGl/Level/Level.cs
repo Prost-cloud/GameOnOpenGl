@@ -24,21 +24,21 @@ namespace GameOpenGl.Level
                  {
                      if (i == 0 || i == 9 || j == 0 || j == 7)
                      {
-                         _gameObjects.Add(new Wall(new Misc.Pos(i, j), "\\Textures\\wall.png"));
+                         _gameObjects.Add(new Wall(new Misc.Pos(i, j), "wall.png"));
                      }
                      else
                      {
-                         _gameObjects.Add(new BackgroundWall(new Misc.Pos(i, j), "\\Textures\\BGWall.jpg"));
+                         _gameObjects.Add(new BackgroundWall(new Misc.Pos(i, j), "BGWall.jpg"));
                      }
                  }
 
-            _gameObjects.Clear();
-            _gameObjects.Add(new Wall(new Misc.Pos(-1, 5), "\\Textures\\wall.png"));
+            //_gameObjects.Clear();
+            _gameObjects.Add(new Wall(new Misc.Pos(-1, 5), "wall.png"));
 
-            _gameObjects.Add(new Player(new Misc.Pos(4, 5), "\\Textures\\Player.png"));
-            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "\\Textures\\1_2789.png"));
-            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "\\Textures\\1_2789.png"));
-            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "\\Textures\\1_2789.png"));
+            _gameObjects.Add(new Player(new Misc.Pos(4, 5), "Player.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "1_2789.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "1_2789.png"));
+            //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "1_2789.png"));
 
 
         }

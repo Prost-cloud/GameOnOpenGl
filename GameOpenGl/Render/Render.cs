@@ -21,6 +21,8 @@ namespace GameOpenGl.Renders
         private SquareVAO _VAO;
         private Matrix4x4 _projectionMatrix;
         private IShaderProgram _shaderProgram;
+        private uint _currentTextureId;
+        private Matrix4x4 _matrixScale;
 
         private double _lastTime = 0;
         private double _currentTime, _deltaTime;
@@ -38,6 +40,13 @@ namespace GameOpenGl.Renders
             _VAO = new SquareVAO();
 
             _shaderProgram = new SquareTextureShader();
+
+            GL.glUseProgram(_shaderProgram.GetShaderId());
+
+            _matrixScale = Matrix4x4.CreateScale(0.2f);
+            var modelLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "model");
+            var modelMatrix =  Matrix4x4.CreateTranslation(-3f, -3.5f, 0f);
+            GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
         }
 
         private void PrepareContext()
@@ -49,7 +58,7 @@ namespace GameOpenGl.Renders
             Glfw.WindowHint(Hint.Doublebuffer, true);
             Glfw.WindowHint(Hint.Decorated, true);
             Glfw.SwapInterval(0);
-            
+
         }
 
         public void RenderFrame(IGameObject[] gameObjects)
@@ -72,60 +81,38 @@ namespace GameOpenGl.Renders
             }
 
             _lastTime = _currentTime;
+            _currentTextureId = 0;
         }
 
         private void DrawGameObject(IGameObject gameObject)
         {
 
             GL.glUseProgram(_shaderProgram.GetShaderId());
-            var modelLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "model");
-            //var projectionLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "projection");
             var viewLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "view");
-            //var TextureLocation = GL.glGetUniformLocation(_shaderProgram.GetShaderId(), "inTexture");
 
             var objPos = gameObject.GetPosition();
 
-            //var modelMatrix = _ZeroMatrix * Matrix4x4.CreateTranslation(objPos.X, objPos.Y, 0);
-            var modelMatrix =  Matrix4x4.CreateTranslation(-3f, -3.5f, 0f);
-
-            //var viewMatrix = Matrix4x4.CreateLookAt(
-            //    new Vector3(0.0f, 0.0f, 0.0f),
-            //    new Vector3(0.0f, 0.0f, 0.0f) + new Vector3(0.0f, 0.0f, 5.0f),
-            //    new Vector3(0.0f, 1.0f, 0.0f));
 
             var viewMatrix = Matrix4x4.CreateTranslation(objPos.X - (0.44f * objPos.X), objPos.Y, 0);
 
-            var matrixScale = Matrix4x4.CreateScale(0.2f);
+            //GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
+            GL.glUniformMatrix4fv(viewLocation, 1, false, (viewMatrix * _matrixScale).ToFloatArray());
 
-            GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
-            //GL.glUniformMatrix4fv(projectionLocation, 1, false, _projectionMatrix.ToFloatArray());
-            GL.glUniformMatrix4fv(viewLocation, 1, false, (viewMatrix * matrixScale).ToFloatArray());
-
-            //modelMatrix.ShowMatrix("model");
-            //viewMatrix.ShowMatrix("view");
-            //(modelMatrix * viewMatrix).ShowMatrix("model * view");
-            //(viewMatrix * modelMatrix).ShowMatrix("view * model");
-
-            //GL.glActiveTexture(GL.GL_TEXTURE0);
-            //Console.WriteLine($"Texture Id {gameObject.GetTextureId()}");
-            GL.glBindTexture(GL.GL_TEXTURE_2D, gameObject.GetTextureId());
-            //GL.glUniform1i(TextureLocation, 0);
-
+            if (gameObject.GetTextureId() != _currentTextureId)
+            {
+                _currentTextureId = gameObject.GetTextureId();
+                GL.glBindTexture(GL.GL_TEXTURE_2D, gameObject.GetTextureId());
+            }
             GL.glBindVertexArray(_VAO.IdVAO);
 
             unsafe
             {
-                //GL.glDrawArrays(GL.GL_TRIANGLES, 0, 6);
-                GL.glDrawElements(GL.GL_TRIANGLES, 6, GL.GL_UNSIGNED_INT, (void*) 0);
-                var i = GL.GetError();
-                var j = 0;
+                GL.glDrawElements(GL.GL_TRIANGLES, 6, GL.GL_UNSIGNED_INT, (void*)0);
             }
 
-            GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
+            //GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
 
             GL.glBindVertexArray(0);
-
-            //  GL.glDrawElements(); 
         }
 
         private Window CreateWindow(int width, int height)
