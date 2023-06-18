@@ -1,4 +1,5 @@
 ﻿using GameOpenGl.GameObject;
+using GameOpenGl.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,8 @@ namespace GameOpenGl.Level
     internal interface ILevel
     {
         IGameObject[] GetGameObjects();
+        void MovePlayer(Player Player, Pos pos);
+        //void CheckCollision(IGameObject GameObject);
+
     }
 }

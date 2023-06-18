@@ -8,16 +8,16 @@ namespace GameOpenGl.Misc
         {
             var result = new float[16];
 
-            result[0] = matrix.M11;
-            result[1] = matrix.M12;
-            result[2] = matrix.M13;
-            result[3] = matrix.M14;
-            result[4] = matrix.M21;
-            result[5] = matrix.M22;
-            result[6] = matrix.M23;
-            result[7] = matrix.M24;
-            result[8] = matrix.M31;
-            result[9] = matrix.M32;
+            result[0]  = matrix.M11;
+            result[1]  = matrix.M12;
+            result[2]  = matrix.M13;
+            result[3]  = matrix.M14;
+            result[4]  = matrix.M21;
+            result[5]  = matrix.M22;
+            result[6]  = matrix.M23;
+            result[7]  = matrix.M24;
+            result[8]  = matrix.M31;
+            result[9]  = matrix.M32;
             result[10] = matrix.M33;
             result[11] = matrix.M34;
             result[12] = matrix.M41;

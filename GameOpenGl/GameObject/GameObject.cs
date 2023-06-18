@@ -1,28 +1,27 @@
 ﻿using GameOpenGl.Misc;
 using GameOpenGl.Render.Object2D;
 using GameOpenGl.Render.TextureLoader;
-using OpenGL;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameOpenGl.GameObject
 {
     internal class GameObject : IGameObject
     {
-        //public delegate void OnTextureChangeHandler(object sender, TextureChangeEventArgs e); 
-        public event EventHandler<TextureChangeEventArgs> OnTextureChange;
+        public event EventHandler<TextureChangeEventArgs>? OnTextureChange;
+        public event EventHandler<PositionChangeEventArgs>? OnPositionChange;
+        public event EventHandler<CollisionEventArgs>? OnCollision;
 
         protected Pos _position;
         protected RenderTypeEnum _renderType;
         protected string _textureName;
         protected uint _currentTexture;
 
-        object _objectLock = new object();
+        protected bool _canCollision;
+
+        public bool CanCollision => _canCollision;
+
+
+        public float Widht { get; private set; }
+        public float Height { get; private set; }
 
         public uint CurrentTexture
         {
@@ -41,6 +40,9 @@ namespace GameOpenGl.GameObject
         public GameObject()
         {
             _position = new Pos(0, 0);
+            Widht = 1f;
+            Height = 1f;
+            _canCollision = false;
         }
 
         public GameObject(Pos pos, string textureName, RenderTypeEnum renderType)
@@ -50,9 +52,24 @@ namespace GameOpenGl.GameObject
             _textureName = textureName;
 
             _currentTexture = new TextureLoader().GetOrCreateTexture(textureName);
+
+            Widht = 1f;
+            Height = 1f;
         }
 
-        public Pos GetPosition() => _position;
+        public Pos Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+                OnPositionChange?.Invoke(this, new PositionChangeEventArgs(value));
+            }
+
+        }
 
         public RenderTypeEnum GetRenderType()
         {
@@ -62,5 +79,15 @@ namespace GameOpenGl.GameObject
         public string GetTextureName() => _textureName;
 
         public uint GetCurrentTextureId() => _currentTexture;
+
+        public Pos GetPosition()
+        {
+            return _position;
+        }
+
+        public void InvokeCollision()
+        {
+            OnCollision?.Invoke(this, new CollisionEventArgs());
+        }
     }
 }

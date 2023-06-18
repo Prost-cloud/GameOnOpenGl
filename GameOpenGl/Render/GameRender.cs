@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameOpenGl.GameObject;
-using GameOpenGl.VAO;
+﻿using GameOpenGl.GameObject;
 using GLFW;
 using OpenGL;
 using System.Numerics;
-using GameOpenGl.RenderProgram;
 using GameOpenGl.Misc;
 using GameOpenGl.Render.Object2D;
 using GameOpenGl.ShaderProgram;
@@ -23,7 +16,7 @@ namespace GameOpenGl.Renders
         private uint _currentTextureId;
         private Matrix4x4 _matrixScale;
 
-        private int _isNeedRerender = 2;
+        //private int _isNeedRerender = 2;
 
         public bool IsExit() => Glfw.WindowShouldClose(_window);
 
@@ -48,7 +41,6 @@ namespace GameOpenGl.Renders
             var modelLocation = GL.glGetUniformLocation(programID, "model");
             var modelMatrix = Matrix4x4.CreateTranslation(-3f, -3.5f, 0f);
             GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
-            GL.glClearColor(0f, 0f, 0f, 1f);
 
             _currentTextureId = 0;
         }
@@ -62,7 +54,7 @@ namespace GameOpenGl.Renders
             Glfw.WindowHint(Hint.Doublebuffer, true);
             Glfw.WindowHint(Hint.Decorated, true);
             Glfw.SwapInterval(1);
-
+            GL.glClearColor(0f, 0f, 0f, 1f);
         }
 
         public void RenderFrame()
@@ -146,5 +138,6 @@ namespace GameOpenGl.Renders
 
             return NewWindow;
         }
+
     }
 }

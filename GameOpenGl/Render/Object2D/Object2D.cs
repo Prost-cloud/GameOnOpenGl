@@ -1,14 +1,7 @@
 ﻿using GameOpenGl.GameObject;
-using GameOpenGl.Render.TextureLoader;
 using GameOpenGl.Misc;
-using GameOpenGl.RenderProgram;
 using GameOpenGl.ShaderProgram;
 using GameOpenGl.VAO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameOpenGl.Render.Object2D
 {
@@ -32,8 +25,12 @@ namespace GameOpenGl.Render.Object2D
                 ShaderProgram = new BaseShader().GetOrCreateShaderId();
             }
             gameObject.OnTextureChange += HandleTextureChange;
+            gameObject.OnPositionChange += HandlePositionChange;
+            gameObject.OnCollision += HandleCollision;
+
             _textureId = gameObject.GetCurrentTextureId();
-            //this._textureId = new TextureLoader.TextureLoader().GetOrCreateTexture(gameObject.GetTextureName());
+            //this._textureId = new TextureLoader.TextureLoader() 
+            //.GetOrCreateTexture(gameObject.GetTextureName());
         }
 
         public Pos GetPosition()
@@ -47,6 +44,16 @@ namespace GameOpenGl.Render.Object2D
         {
             IsNeedRender = 2;
             _textureId = e.TextureId;
+        }
+
+        protected void HandlePositionChange(object sender, PositionChangeEventArgs e)
+        {
+            IsNeedRender = 2;
+        }
+
+        protected void HandleCollision(object sender, CollisionEventArgs e)
+        {
+            IsNeedRender = 2;
         }
     }
 }

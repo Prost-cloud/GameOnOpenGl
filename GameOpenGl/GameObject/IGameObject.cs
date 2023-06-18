@@ -14,7 +14,10 @@ namespace GameOpenGl.GameObject
         RenderTypeEnum GetRenderType();
         string GetTextureName();
 
-        event EventHandler<TextureChangeEventArgs> OnTextureChange;
         uint GetCurrentTextureId();
+
+        event EventHandler<TextureChangeEventArgs> OnTextureChange;
+        event EventHandler<PositionChangeEventArgs> OnPositionChange;
+        event EventHandler<CollisionEventArgs> OnCollision;
     }
 }

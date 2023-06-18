@@ -15,7 +15,7 @@ namespace GameOpenGl.GameObject
 
         public Wall(Pos pos, string texturePath) : base(pos, texturePath, Render.Object2D.RenderTypeEnum.SquareRender)
         {
-
+            _canCollision = true;
         }
     }
 }
