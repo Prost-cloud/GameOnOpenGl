@@ -1,4 +1,6 @@
 ﻿using GameOpenGl.Misc;
+using GameOpenGl.Render.Object2D;
+using GameOpenGl.Render.TextureLoader;
 using OpenGL;
 using System;
 using System.Collections.Generic;
@@ -12,81 +14,53 @@ namespace GameOpenGl.GameObject
 {
     internal class GameObject : IGameObject
     {
-        static protected Dictionary<string, uint> _textureMap;
+        //public delegate void OnTextureChangeHandler(object sender, TextureChangeEventArgs e); 
+        public event EventHandler<TextureChangeEventArgs> OnTextureChange;
 
         protected Pos _position;
+        protected RenderTypeEnum _renderType;
         protected string _textureName;
+        protected uint _currentTexture;
 
-        static GameObject()
+        object _objectLock = new object();
+
+        public uint CurrentTexture
         {
-            _textureMap = new();
+            get
+            {
+                return _currentTexture;
+            }
+            protected set
+            {
+                _currentTexture = value;
+
+                OnTextureChange?.Invoke(this, new TextureChangeEventArgs(value));
+            }
         }
+
         public GameObject()
         {
-            _position = new Pos(0,0);
+            _position = new Pos(0, 0);
         }
 
-        public GameObject(Pos pos, string textureName)
+        public GameObject(Pos pos, string textureName, RenderTypeEnum renderType)
         {
-            this._position = pos;
-            this._textureName = textureName;
+            _renderType = renderType;
+            _position = pos;
+            _textureName = textureName;
 
-            if (!_textureMap.TryGetValue(textureName, out _))
-            {
-                byte[] textureByteArray;
-
-                int width, height;
-                BitmapData data;
-                Bitmap image = new Bitmap(Environment.CurrentDirectory + "\\Textures\\" + textureName);
-
-
-                width = image.Width;
-                height = image.Height;
-
-                data = image.LockBits(new Rectangle(0, 0, width, height),
-                    ImageLockMode.ReadOnly,
-                    PixelFormat.Format32bppArgb);
-
-                var textureId = GL.glGenTexture();
-
-                GL.glBindTexture(GL.GL_TEXTURE_2D, textureId);
-
-                GL.glTexImage2D(
-                    GL.GL_TEXTURE_2D,
-                    0,
-                    GL.GL_RGBA,
-                    width,
-                    height,
-                    0,
-                    GL.GL_BGRA,
-                    GL.GL_UNSIGNED_BYTE,
-                    data.Scan0);
-
-                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-                GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-
-                GL.glEnable(GL.GL_BLEND);
-                GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-
-                GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
-                GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
-
-                GameObject.AddTexture(textureName, textureId);
-            }
+            _currentTexture = new TextureLoader().GetOrCreateTexture(textureName);
         }
 
         public Pos GetPosition() => _position;
 
-        public virtual uint GetTextureId() => GameObject.GetValueByName(_textureName);
+        public RenderTypeEnum GetRenderType()
+        {
+            return _renderType;
+        }
 
-        static protected void AddTexture(string name, uint value)
-        {
-            _textureMap.Add(name, value);
-        }
-        
-        static protected uint GetValueByName(string name)
-        {
-            return _textureMap[name];
-        }
+        public string GetTextureName() => _textureName;
+
+        public uint GetCurrentTextureId() => _currentTexture;
     }
 }

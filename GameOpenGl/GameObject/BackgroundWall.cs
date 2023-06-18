@@ -12,7 +12,7 @@ namespace GameOpenGl.GameObject
 {
     internal sealed class BackgroundWall : GameObject, IGameObject
     {
-        public BackgroundWall(Pos pos, string v) : base(pos, v)
+        public BackgroundWall(Pos pos, string v) : base(pos, v, Render.Object2D.RenderTypeEnum.SquareRender)
         {
 
         }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameOpenGl.RenderProgram
+namespace GameOpenGl.Render.Object2D
 {
-    internal interface IShaderProgram
+    internal enum RenderTypeEnum
     {
-        uint GetOrCreateShaderId();
+        SquareRender
     }
 }

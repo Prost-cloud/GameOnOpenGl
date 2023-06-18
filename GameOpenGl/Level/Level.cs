@@ -12,7 +12,7 @@ namespace GameOpenGl.Level
         private List<IGameObject> _gameObjects;
         public IGameObject[] GetGameObjects() => _gameObjects.ToArray();
 
-        public TestLevel()
+        public TestLevel(Game.Game onRender)
         {
 
             int x = 10, y = 8;
@@ -35,7 +35,7 @@ namespace GameOpenGl.Level
             //_gameObjects.Clear();
             _gameObjects.Add(new Wall(new Misc.Pos(-1, 5), "wall.png"));
 
-            _gameObjects.Add(new Player(new Misc.Pos(4, 5), "Player.png"));
+            _gameObjects.Add(new Player(new Misc.Pos(0.5f, 2.3f), "Player.png", onRender));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "1_2789.png"));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "1_2789.png"));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "1_2789.png"));

@@ -9,9 +9,9 @@ using OpenGL;
 
 namespace GameOpenGl.ShaderProgram
 {
-    internal sealed class SquareTextureShader : IShaderProgram
+    internal class BaseShader : IShaderProgram
     {
-        private uint _programID;
+        static private Dictionary<Type, uint> _shaderProgramDictionary = new();
 
         private const string VertexShader = @"#version 330 core
                                                 layout (location = 0) in vec3 pos;
@@ -48,38 +48,32 @@ namespace GameOpenGl.ShaderProgram
                                                     //result = vec4(1f, 0f, 0f, 0f);
                                                 }";
 
-        public SquareTextureShader()
+        public uint GetOrCreateShaderId()
         {
+            if (_shaderProgramDictionary.TryGetValue(this.GetType(), out uint id))
+            {
+                return id;
+            }
+
             var vertex = CreateShader(GL.GL_VERTEX_SHADER, VertexShader);
             var fragment = CreateShader(GL.GL_FRAGMENT_SHADER, FragmentShader);
 
-            _programID = GL.glCreateProgram();
+            var programID = GL.glCreateProgram();
 
-            //GL.glCompileShader(vertex);
-            //GL.glCompileShader(fragment);
-            GL.glAttachShader(_programID, vertex);   
-            GL.glAttachShader(_programID, fragment);
+            GL.glAttachShader(programID, vertex);
+            GL.glAttachShader(programID, fragment);
 
-            //GL.glBindAttribLocation(_programID, 1u, "model");
-            //GL.glBindAttribLocation(_programID, 2u, "view");
-            //GL.glBindAttribLocation(_programID, 3u, "projection");
-            //GL.glBindAttribLocation(_programID, 4u, "inTexture");
+            GL.glLinkProgram(programID);
 
-            //var modelLocation = GL.glGetUniformLocation(_programID, "model");
-            //var ProjectionLocation = GL.glGetUniformLocation(_programID, "projection");
-            //var viewLocation = GL.glGetUniformLocation(_programID, "view");
-            //var TextureLocation = GL.glGetUniformLocation(_programID, "inTexture");
-
-
-            GL.glLinkProgram(_programID);
-
-            GL.glDetachShader(_programID, vertex);
-            GL.glDetachShader(_programID, fragment);
+            GL.glDetachShader(programID, vertex);
+            GL.glDetachShader(programID, fragment);
 
             GL.glDeleteShader(vertex);
             GL.glDeleteShader(fragment);
 
-            //GL.glUseProgram(ProgramID);
+            RegisterShader(this.GetType(), programID);
+
+            return programID;
         }
 
         private uint CreateShader(int type, string source)
@@ -89,29 +83,20 @@ namespace GameOpenGl.ShaderProgram
             GL.glShaderSource(shader, source);
             GL.glCompileShader(shader);
 
-            int [] status = GL.glGetShaderiv(shader, GL.GL_COMPILE_STATUS, 1);
+            int[] status = GL.glGetShaderiv(shader, GL.GL_COMPILE_STATUS, 1);
 
             if (status[0] == 0)
             {
                 string error = GL.glGetShaderInfoLog(shader);
                 Console.WriteLine("Shader compiling error: " + error);
             }
-            else
-            {
-                Console.WriteLine("Shader compile success");
-            }
 
             return shader;
         }
 
-        public uint GetShaderId()
+        static protected void RegisterShader(Type shaderType, uint programId)
         {
-            return _programID;
+            _shaderProgramDictionary.Add(shaderType, programId);
         }
-
-        // ~TriangeShader()
-        // {
-        //     GL.glDeleteProgram(ProgramID);
-        // }
     }
 }

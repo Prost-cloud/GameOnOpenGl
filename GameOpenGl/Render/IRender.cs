@@ -11,7 +11,7 @@ namespace GameOpenGl.Renders
 {
     internal interface IRender
     {
-        void RenderFrame(IGameObject[] gameObjects);
+        void RenderFrame();
         bool IsExit();
     }
 }

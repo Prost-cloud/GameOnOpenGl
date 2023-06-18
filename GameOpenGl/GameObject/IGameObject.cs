@@ -1,4 +1,5 @@
 ﻿using GameOpenGl.Misc;
+using GameOpenGl.Render.Object2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace GameOpenGl.GameObject
     internal interface IGameObject
     {
         Pos GetPosition();
-        uint GetTextureId();
+        RenderTypeEnum GetRenderType();
+        string GetTextureName();
+
+        event EventHandler<TextureChangeEventArgs> OnTextureChange;
+        uint GetCurrentTextureId();
     }
 }

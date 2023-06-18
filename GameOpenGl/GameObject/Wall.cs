@@ -13,7 +13,7 @@ namespace GameOpenGl.GameObject
     internal sealed class Wall : GameObject, IGameObject
     {
 
-        public Wall(Pos pos, string texturePath) : base(pos, texturePath)
+        public Wall(Pos pos, string texturePath) : base(pos, texturePath, Render.Object2D.RenderTypeEnum.SquareRender)
         {
 
         }
