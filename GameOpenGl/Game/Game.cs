@@ -8,6 +8,7 @@ using GLFW;
 using OpenGL;
 using GameOpenGl.Renders;
 using GameOpenGl.GameObject;
+using GameOpenGl.GameObject.PressedEvents;
 
 namespace GameOpenGl.Game
 {
@@ -23,6 +24,9 @@ namespace GameOpenGl.Game
 
         public delegate void OnRenderHandler(object sender, OnRenderEventArgs args); 
         public event OnRenderHandler? OnRender;
+
+        public delegate void OnPressedKeyHandler(object sender, KeyPressedEventArgs args); 
+        public event OnPressedKeyHandler? OnPressedKey;
 
         public Game()
         {
@@ -55,9 +59,13 @@ namespace GameOpenGl.Game
             }
         }
 
-        static void HandleKeyPressed(Window window, Keys key, int scancode, InputState action, ModifierKeys mods)
+        private void HandleKeyPressed(Window window, Keys key, int scancode, InputState action, ModifierKeys mods)
         {
+            PressedState ps = action == InputState.Press ? PressedState.Pressed : PressedState.Released;
 
+            Console.WriteLine($"Pressed key {key}");
+
+            OnPressedKey?.Invoke(this, new KeyPressedEventArgs(key, ps));
         }
     }
 }

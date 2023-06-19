@@ -31,5 +31,19 @@ namespace GameOpenGl.Misc
             left.X - right.X,
             left.Y - right.Y);
         }
+
+        public static Pos operator *(Pos left, float right)
+        {
+            return new Pos(
+            left.X * right,
+            left.Y * right);
+        }
+
+        public static Pos operator /(Pos left, float right)
+        {
+            return new Pos(
+            left.X / right,
+            left.Y / right);
+        }
     }
 }
