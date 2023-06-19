@@ -76,7 +76,7 @@ namespace GameOpenGl.Render.TextureLoader
 
                     GL.glEnable(GL.GL_BLEND);
                     //GL.glDisable(GL.GL_BLEND);
-                    //GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+                    GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
                     GL.glGenerateMipmap(GL.GL_TEXTURE_2D);
                     GL.glBindTexture(GL.GL_TEXTURE_2D, 0);

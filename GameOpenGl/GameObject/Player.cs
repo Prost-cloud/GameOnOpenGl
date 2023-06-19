@@ -54,6 +54,8 @@ namespace GameOpenGl.GameObject
 
                 CurrentTexture = _textures[_currentTextureIndex];
             }
+
+            Position += new Pos(0.0001f, 0.0001f);
         }
     }
 }

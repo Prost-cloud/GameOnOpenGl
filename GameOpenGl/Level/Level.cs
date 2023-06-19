@@ -36,13 +36,6 @@ namespace GameOpenGl.Level
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "1_2789.png"));
         }
 
-        public void MovePlayer(Player Player, Pos pos)
-        {
-            Player.Position += pos;
-            var collisionObjects = CheckCollisionAndReturnObject(Player);
-
-
-        }
 
         public GameObject.GameObject[] CheckCollisionAndReturnObject(GameObject.GameObject GameObject)
         {

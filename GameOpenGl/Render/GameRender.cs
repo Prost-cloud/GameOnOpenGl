@@ -55,6 +55,8 @@ namespace GameOpenGl.Renders
             Glfw.WindowHint(Hint.Decorated, true);
             Glfw.SwapInterval(1);
             GL.glClearColor(0f, 0f, 0f, 1f);
+            //GL.glEnable(GL.GL_DEPTH_TEST);
+            GL.glDisable(GL.GL_DEPTH_TEST);
         }
 
         public void RenderFrame()

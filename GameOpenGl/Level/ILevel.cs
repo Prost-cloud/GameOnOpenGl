@@ -11,7 +11,7 @@ namespace GameOpenGl.Level
     internal interface ILevel
     {
         IGameObject[] GetGameObjects();
-        void MovePlayer(Player Player, Pos pos);
+        //void MovePlayer(Player Player, Pos pos);
         //void CheckCollision(IGameObject GameObject);
 
     }
