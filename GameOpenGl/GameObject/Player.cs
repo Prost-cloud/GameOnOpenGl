@@ -68,6 +68,8 @@ namespace GameOpenGl.GameObject
         {
             onRender.OnRender += HandleRenderEvent;
 
+            _onFoot = true;
+
             _keyPressedStates = new bool[350];
 
             _position = pos;
@@ -92,18 +94,18 @@ namespace GameOpenGl.GameObject
         {
             Pos newAcceleration = new Pos();
 
-            newAcceleration.X = _speed.X > 0 ? -0.5f : 0.5f;
+            newAcceleration.X = _speed.X > 0 ? -1.5f : 1.5f;
             newAcceleration.X = _speed.X < 0.0000001f &&  _speed.X > -0.0000001f ? 0f : newAcceleration.X;
             newAcceleration.Y = 0f;
 
             if (_keyPressedStates[(int)Keys.D])
             {
-                newAcceleration = new Pos(1f, 0f);
+                newAcceleration = new Pos(3f, 0f);
             }
 
             if (_keyPressedStates[(int)Keys.A])
             {
-                newAcceleration = new Pos(-1f, 0f);
+                newAcceleration = new Pos(-3f, 0f);
             }
 
             if (_keyPressedStates[(int)Keys.W] && _onFoot)
@@ -156,6 +158,8 @@ namespace GameOpenGl.GameObject
         {
             _keyPressedStates[(int)e.KeyCode] =
                 e.InputState == PressedEvents.PressedState.Pressed;
+
+            Console.WriteLine($"Handle Key Press Player {e.KeyCode} {e.InputState}");
         }
     }
 }

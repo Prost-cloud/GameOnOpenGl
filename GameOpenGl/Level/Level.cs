@@ -34,8 +34,13 @@ namespace GameOpenGl.Level
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "1_2789.png"));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "1_2789.png"));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(0, 0), "1_2789.png"));
+            onRender.OnRender += HandleRenderTick;
         }
 
+        private void HandleRenderTick(object sender, Game.OnRenderEventArgs args)
+        {
+            CheckCollisionAndReturnObject((Player)_player);
+        }
 
         public GameObject.GameObject[] CheckCollisionAndReturnObject(GameObject.GameObject GameObject)
         {

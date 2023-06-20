@@ -49,7 +49,7 @@ namespace GameOpenGl.Game
                 _deltaTime = _currentTime - _lastTime;
                 _render.RenderFrame();
 
-                Console.WriteLine($"FPS: {(int)(1 / _deltaTime)}");
+                //Console.WriteLine($"FPS: {(int)(1 / _deltaTime)}");
 
                 OnRender?.Invoke(this, new OnRenderEventArgs((float)_deltaTime));
 
@@ -61,9 +61,11 @@ namespace GameOpenGl.Game
 
         private void HandleKeyPressed(Window window, Keys key, int scancode, InputState action, ModifierKeys mods)
         {
+            if (action == InputState.Repeat) return;
+
             PressedState ps = action == InputState.Press ? PressedState.Pressed : PressedState.Released;
 
-            Console.WriteLine($"Pressed key {key}");
+            Console.WriteLine($"Pressed key {key} {action}");
 
             OnPressedKey?.Invoke(this, new KeyPressedEventArgs(key, ps));
         }
