@@ -28,6 +28,12 @@ namespace GameOpenGl.Game
         public delegate void OnPressedKeyHandler(object sender, KeyPressedEventArgs args); 
         public event OnPressedKeyHandler? OnPressedKey;
 
+        //private delegate void KeyPressedDelegate =
+        //        (Window window, Keys key, int scan, InputState action, ModifierKeys mods)
+        //            => this.HandleKeyPressed(window, key, scan, action, mods));
+
+        private GLFW.KeyCallback KeyCallbackDelegate;
+
         public Game()
         {
             Window window = GameRender.PrepareWindow(1280, 720);
@@ -36,9 +42,9 @@ namespace GameOpenGl.Game
 
             //_buttonPressed = new char[1024];
 
-            Glfw.SetKeyCallback(window,
-                (window, key, scan, action, mods)
-                    => HandleKeyPressed(window, key, scan, action, mods));
+            KeyCallbackDelegate = new GLFW.KeyCallback(HandleKeyPressed);
+
+            Glfw.SetKeyCallback(window, KeyCallbackDelegate);
         }
         public void Run()
         {
