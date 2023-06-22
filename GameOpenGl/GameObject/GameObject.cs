@@ -1,4 +1,5 @@
-﻿using GameOpenGl.Misc;
+﻿using GameOpenGl.GameObject.CollisionEvent;
+using GameOpenGl.Misc;
 using GameOpenGl.Render.Object2D;
 using GameOpenGl.Render.TextureLoader;
 
@@ -20,7 +21,7 @@ namespace GameOpenGl.GameObject
         public bool CanCollision => _canCollision;
 
 
-        public float Widht { get; private set; }
+        public float Width { get; private set; }
         public float Height { get; private set; }
 
         public uint CurrentTexture
@@ -40,7 +41,7 @@ namespace GameOpenGl.GameObject
         public GameObject()
         {
             _position = new Pos(0, 0);
-            Widht = 1f;
+            Width = 1f;
             Height = 1f;
             _canCollision = false;
         }
@@ -53,7 +54,7 @@ namespace GameOpenGl.GameObject
 
             _currentTexture = new TextureLoader().GetOrCreateTexture(textureName);
 
-            Widht = 1f;
+            Width = 1f;
             Height = 1f;
         }
 

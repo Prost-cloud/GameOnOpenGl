@@ -1,4 +1,5 @@
 ﻿using GameOpenGl.GameObject;
+using GameOpenGl.GameObject.CollisionEvent;
 using GameOpenGl.Misc;
 using GameOpenGl.ShaderProgram;
 using GameOpenGl.VAO;

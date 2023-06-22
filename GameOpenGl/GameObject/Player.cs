@@ -1,4 +1,5 @@
 ﻿using GameOpenGl.Game;
+using GameOpenGl.GameObject.CollisionEvent;
 using GameOpenGl.Misc;
 using GameOpenGl.Render.TextureLoader;
 using GLFW;
@@ -26,6 +27,7 @@ namespace GameOpenGl.GameObject
         private Pos _speed;
         private Pos _acceleration;
 
+
         private Pos Speed
         {
             get
@@ -40,7 +42,7 @@ namespace GameOpenGl.GameObject
                 if (value.X <= -maxSpeed) value.X = -maxSpeed;
                 if (value.Y >= maxSpeed) value.Y = maxSpeed;
                 if (value.Y <= -maxSpeed) value.Y = -maxSpeed;
-                
+
                 _speed = value;
             }
         }
@@ -95,41 +97,39 @@ namespace GameOpenGl.GameObject
             Pos newAcceleration = new Pos();
 
             newAcceleration.X = _speed.X > 0 ? -1.5f : 1.5f;
-            newAcceleration.X = _speed.X < 0.0000001f &&  _speed.X > -0.0000001f ? 0f : newAcceleration.X;
+            newAcceleration.X = _speed.X < 0.0000001f && _speed.X > -0.0000001f ? 0f : newAcceleration.X;
             newAcceleration.Y = 0f;
 
             if (_keyPressedStates[(int)Keys.D])
             {
-                newAcceleration = new Pos(3f, 0f);
+                newAcceleration.X += 3f;
             }
 
             if (_keyPressedStates[(int)Keys.A])
             {
-                newAcceleration = new Pos(-3f, 0f);
+                newAcceleration.X += -3f;
             }
 
             if (_keyPressedStates[(int)Keys.W] && _onFoot)
             {
-                Speed = new Pos(0f, 3f);
+                _speed.Y += 3f;
                 _keyPressedStates[(int)Keys.W] = false;
                 _onFoot = false;
             }
 
             if (_keyPressedStates[(int)Keys.S])
             {
-                newAcceleration = new Pos(0f, -1f);
+                newAcceleration.Y += -1f;
             }
             else
             {
-                newAcceleration.Y = _onFoot ? -0.25f : 0f;
+                newAcceleration.Y = !_onFoot ? -0.25f : 0f;
             }
 
             Acceleration = newAcceleration;
 
             Speed += Acceleration * deltaTime;
             Position += Speed * deltaTime;
-
-
         }
 
         private void UpdateTextureTick(float deltaTime)
@@ -160,6 +160,77 @@ namespace GameOpenGl.GameObject
                 e.InputState == PressedEvents.PressedState.Pressed;
 
             Console.WriteLine($"Handle Key Press Player {e.KeyCode} {e.InputState}");
+        }
+
+        public void OnCollisionHandle(object sender, CollisionEventArgs args)
+        {
+            if (args.CollisionObject != this) return;
+            Console.WriteLine("collision");
+            foreach (var obj in args.GameObjects)
+            {
+
+                // ********************************************
+                // ********************************************
+                // Check collision type? 
+                var colisionPos = this.Position - obj.Position;
+                var MaxValue = Math.Abs(colisionPos.X) > Math.Abs(colisionPos.Y) ? (colisionPos.X, 'X') : (colisionPos.Y, 'Y');
+
+                var type = 0;
+
+                // 1 - left
+                // 2 - right
+                // 3 - top
+                // 4 - bottom
+
+                if (MaxValue.Item2=='X')
+                {
+                    if (colisionPos.X > 0)
+                        type = 2;
+                    else 
+                        type = 1;
+                }
+                else
+                {
+                    if (colisionPos.Y > 0)
+                        type = 3; 
+                    else
+                        type = 4;
+                }
+
+                // ********************************************
+                // ********************************************
+                // pos (x, y) + (width, height)
+                if (type == 2)
+                {
+                     _position.X = (obj.Position.X + obj.Width / 2 + Width / 2);
+                    _acceleration.X = 0;
+                    _speed.X = 0;
+                }
+
+                if (type == 1)
+                {
+                    _position.X = (obj.Position.X - obj.Width / 2 - Width / 2);
+                    _acceleration.X = 0;
+                    _speed.X = 0;
+                }
+
+                if (type == 3)
+                {
+                    _position.Y = (obj.Position.Y + obj.Height / 2 + Height / 2);
+                    _acceleration.Y = 0;
+                    _speed.Y = 0;
+                }
+
+                if (type == 4)
+                {
+                    _position.Y = (obj.Position.Y - obj.Height / 2 - Height / 2);
+                    _acceleration.Y = 0;
+                    _speed.Y = 0;
+                }
+
+                // check if player on foot
+                if (type == 3) _onFoot = true;
+            }
         }
     }
 }
