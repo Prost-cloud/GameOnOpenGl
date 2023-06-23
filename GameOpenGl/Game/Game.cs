@@ -18,7 +18,7 @@ namespace GameOpenGl.Game
         private IRender _render;
         private Player _player;
 
-        char[] _buttonPressed;
+        //char[] _buttonPressed;
 
         private double _currentTime, _deltaTime, _lastTime;
 

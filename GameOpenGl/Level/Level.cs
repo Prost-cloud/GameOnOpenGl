@@ -18,10 +18,10 @@ namespace GameOpenGl.Level
         {
             _gameObjects = new List<IGameObject>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 100; i++)
                 for (int j = 0; j < 8; j++)
                 {
-                    if (i == 0 || i == 9 || j == 0 || j == 7)
+                    if (i == 0 || i == 99 || j == 0 || j == 7)
                     {
                         _gameObjects.Add(new Wall(new Misc.Pos(i, j), "wall.png"));
                     }
@@ -33,7 +33,7 @@ namespace GameOpenGl.Level
 
             //_gameObjects.Clear();
             _gameObjects.Add(new Wall(new Misc.Pos(-1, 5), "wall.png"));
-            _player = new Player(new Misc.Pos(1.0f, 2.3f), "Player.png", onRender);
+            _player = new Player(new Misc.Pos(51.0f, 2.3f), "Player.png", onRender);
             _gameObjects.Add(_player);
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(2, 2), "1_2789.png"));
             //_gameObjects.Add(new BackgroundWall(new Misc.Pos(1, 1), "1_2789.png"));

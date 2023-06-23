@@ -12,7 +12,7 @@ namespace GameOpenGl.Render.Object2D
         public uint ShaderProgram{ get; private set; }
         public byte IsNeedRender;
 
-        IGameObject _gameObject;
+        public IGameObject _gameObject;
         protected uint _textureId;
 
         public Object2D(IGameObject gameObject)

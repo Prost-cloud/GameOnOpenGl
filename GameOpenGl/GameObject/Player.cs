@@ -182,17 +182,17 @@ namespace GameOpenGl.GameObject
                 // 3 - top
                 // 4 - bottom
 
-                if (MaxValue.Item2=='X')
+                if (MaxValue.Item2 == 'X')
                 {
                     if (colisionPos.X > 0)
                         type = 2;
-                    else 
+                    else
                         type = 1;
                 }
                 else
                 {
                     if (colisionPos.Y > 0)
-                        type = 3; 
+                        type = 3;
                     else
                         type = 4;
                 }
@@ -202,7 +202,7 @@ namespace GameOpenGl.GameObject
                 // pos (x, y) + (width, height)
                 if (type == 2)
                 {
-                     _position.X = (obj.Position.X + obj.Width / 2 + Width / 2);
+                    _position.X = (obj.Position.X + obj.Width / 2 + Width / 2);
                     _acceleration.X = 0;
                     _speed.X = 0;
                 }
