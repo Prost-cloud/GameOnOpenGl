@@ -40,6 +40,8 @@ namespace GameOpenGl.Renders
             _programID = new BaseShader().GetOrCreateShaderId();
             GL.glUseProgram(_programID);
 
+            _camera = new Camera(); 
+
             var modelLocation = GL.glGetUniformLocation(_programID, "model");
             var modelMatrix = Matrix4x4.CreateTranslation(-3f, -3f, 0f);
             GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
@@ -108,11 +110,13 @@ namespace GameOpenGl.Renders
 
             if (renderObject._gameObject is Player)
             {
+                _camera.SetCameraPos(renderObject._gameObject.GetPosition());
+
                 var modelLocation = GL.glGetUniformLocation(_programID, "model");
-                var modelMatrix = Matrix4x4.CreateTranslation(-0.55f * renderObject.GetPosition().X, -0.55f * renderObject.GetPosition().Y , 0f);
+                var modelMatrix = _camera.GetMatrixCameraCenter();
                 GL.glUniformMatrix4fv(modelLocation, 1, false, modelMatrix.ToFloatArray());
 
-                _matrixScale = Matrix4x4.CreateScale(_rng.NextSingle() * 0.01f + 0.2f);
+                _matrixScale = _camera.GetMatrixCameraScale();
             }
 
             if (renderObject.GetTextureId() != _currentTextureId)
